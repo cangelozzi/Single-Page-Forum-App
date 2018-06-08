@@ -14,7 +14,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+      // return all the QUESTIONS starting from the latest...import QUESTION o top
+        return Question::latest()->get();
     }
 
     /**
