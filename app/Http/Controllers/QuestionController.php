@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Question;
 use Illuminate\Http\Request;
+use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
@@ -15,7 +16,7 @@ class QuestionController extends Controller
     public function index()
     {
       // return all the QUESTIONS starting from the latest...import QUESTION o top
-        return Question::latest()->get();
+        return QuestionResource::collection(Question::latest()->get());
     }
 
     /**
@@ -36,7 +37,14 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // POST      | api/question            | question.store
+        // Store Data in Table
+        Question::create($request->all());
+
+        // since user_id is linked to authentication
+        // auth()->user()->question()->create($request->all());
+
+        return response('Created', Response::HTTP_CREATED);
     }
 
     /**
@@ -47,7 +55,9 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        // route model binding, linking a question to an ID
+        // api/question/{question} | question.show  
+        return new QuestionResource($question);
     }
 
     /**
@@ -58,7 +68,8 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        //
+        // 
+
     }
 
     /**
@@ -81,6 +92,9 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        // DESTROY has also Route Model Binding
+        // DELETE    | api/question/{question} | question.destroy 
+        $question->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
