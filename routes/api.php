@@ -21,3 +21,4 @@
 
 // APIRESOURCES gets all the Resources Routes from the Controller! Not just GET...check with: php artisan route:list
 Route::apiResource('/question', 'QuestionController');
+Route::apiResource('/category', 'CategoryController');
