@@ -10,92 +10,106 @@ use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return CategoryResource::collection(category::latest()->get());
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    //! JWT Middleware to stop creating Question without a token except index and store
+  /**
+   * Create a new AuthController instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('JWT', ['except' => ['index', 'show']]);
+  }
+
+  //! END JWT Middleware to stop creating Question without a token
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index()
+  {
+    return CategoryResource::collection(category::latest()->get());
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
+  {
         //
-    }
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
         //bring fields into store function
-        $category = new Category;
-        $category->name = $request->name;
-        $category->slug = str_slug($request->name);
-        $category->save();
-        return response('Created', Response::HTTP_CREATED);
-    }
+    $category = new Category;
+    $category->name = $request->name;
+    $category->slug = str_slug($request->name);
+    $category->save();
+    return response('Created', Response::HTTP_CREATED);
+  }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        return new CategoryResource($category);
+  /**
+   * Display the specified resource.
+   *
+   * @param  \App\Model\Category  $category
+   * @return \Illuminate\Http\Response
+   */
+  public function show(Category $category)
+  {
+    return new CategoryResource($category);
 
-    }
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  \App\Model\Category  $category
+   * @return \Illuminate\Http\Response
+   */
+  public function edit(Category $category)
+  {
         //
-    }
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
-    {
-        $category->update(
-          [
-            'name'=>$request->name,
-            'slug'=>str_slug($request->name)
-          ]
-          );
-          return response('Updated', Response::HTTP_ACCEPTED);
-    }
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \App\Model\Category  $category
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, Category $category)
+  {
+    $category->update(
+      [
+        'name' => $request->name,
+        'slug' => str_slug($request->name)
+      ]
+    );
+    return response('Updated', Response::HTTP_ACCEPTED);
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Model\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
-    {
-        $category->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
-    }
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  \App\Model\Category  $category
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy(Category $category)
+  {
+    $category->delete();
+    return response(null, Response::HTTP_NO_CONTENT);
+  }
 }

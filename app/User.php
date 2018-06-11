@@ -55,4 +55,10 @@ class User extends Authenticatable implements JWTSubject
   {
     return [];
   }
+
+  // mutator for encripting password at signup
+  public function setPasswordAttribute ($value)
+  {
+    $this->attributes['password'] = bcrypt($value);
+  }
 }

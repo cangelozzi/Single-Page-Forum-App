@@ -10,6 +10,20 @@ use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
+
+  //! JWT Middleware to stop creating Question without a token except index and store
+  /**
+   * Create a new AuthController instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('JWT', ['except' => ['index', 'show']]);
+  }
+
+  //! END JWT Middleware to stop creating Question without a token
+
   /**
    * Display a listing of the resource.
    *
