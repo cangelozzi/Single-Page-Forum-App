@@ -8,6 +8,9 @@ use App\User;
 
 class Reply extends Model
 {
+
+    protected $guarded = [];
+
     // relationship between QUESTIONS and REPLY
     public function question() {
       return $this->belongsTo(Question::class);
