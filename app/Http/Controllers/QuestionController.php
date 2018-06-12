@@ -4,115 +4,76 @@ namespace App\Http\Controllers;
 
 use App\Model\Question;
 use Illuminate\Http\Request;
-//use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('JWT', ['except' => ['index','show']]);
+    }
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return QuestionResource::collection(Question::latest()->get());
+    }
 
-  //! JWT Middleware to stop creating Question without a token except index and store
-  /**
-   * Create a new AuthController instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-    $this->middleware('JWT', ['except' => ['index', 'show']]);
-  }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $question = auth()->user()->question()->create($request->all());
+        return response(new QuestionResource($question), Response::HTTP_CREATED);
+    }
 
-  //! END JWT Middleware to stop creating Question without a token
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Model\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Question $question)
+    {
+        return new QuestionResource($question);
+    }
 
-  /**
-   * Display a listing of the resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function index()
-  {
-      // return all the QUESTIONS starting from the latest...import QUESTION o top
-    return QuestionResource::collection(Question::latest()->get());
-  }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Question $question)
+    {
+        $question->update($request->all());
+        return response('Update', Response::HTTP_ACCEPTED);
+    }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-        //
-  }
-
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
-  {
-        // POST      | api/question            | question.store
-        // Store Data in Table
-    Question::create($request->all());
-
-        // since user_id is linked to authentication
-        // auth()->user()->question()->create($request->all());
-
-    return response('Created', Response::HTTP_CREATED);
-  }
-
-  /**
-   * Display the specified resource.
-   *
-   * @param  \App\Model\Question  $question
-   * @return \Illuminate\Http\Response
-   */
-  public function show(Question $question)
-  {
-        // route model binding, linking a question to an ID
-        // api/question/{question} | question.show  
-    return new QuestionResource($question);
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\Model\Question  $question
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(Question $question)
-  {
-        // 
-
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \App\Model\Question  $question
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, Question $question)
-  {
-        // PUT|PATCH | api/question/{question} | question.update 
-    $question->update($request->all());
-    return response('Update', Response::HTTP_ACCEPTED);
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  \App\Model\Question  $question
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy(Question $question)
-  {
-        // DESTROY has also Route Model Binding
-        // DELETE    | api/question/{question} | question.destroy 
-    $question->delete();
-    return response(null, Response::HTTP_NO_CONTENT);
-  }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Model\Question  $question
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Question $question)
+    {
+        $question->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
 }

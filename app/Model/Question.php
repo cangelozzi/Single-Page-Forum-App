@@ -7,37 +7,43 @@ use App\User;
 
 class Question extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
 
-    //create a function that make use of the SLUG as key router, in place of the question_ID
+        static::creating(function ($question) {
+            $question->slug = str_slug($question->title);
+        });
+    }
+
     public function getRouteKeyName()
     {
-      return 'slug';
-    }    
+        return 'slug';
+    }
 
-    // MASS ASSIGNMENT FIX for POST REQUESTS
-    // protected $fillable = ['title', 'slug', 'body', 'category_id', 'user_id'];
+    // protected $guarded = [];
 
-    // also allowing all the fields
-    protected $guarded = [];
+    protected $fillable = ['title','slug','body','user_id','category_id'];
 
-    // create Relationship between USER and the QUESTION, and import User model
-    public function user() {
-      return $this->belongsTo(User::class);
+    protected $with = ['replies'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class)->latest();
     }
     
-    // create Relationship between REPLIES (Question can have many replies!) and the QUESTION
-    public function replies() {
-      return $this->hasMany(Reply::class);
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
-    // create Relationship between CATEGORIES (Question are linked to specific categories!) and the QUESTION
-    public function category() {
-      return $this->belongsTo(Category::class);
-    }
-
-    // function to get url path
     public function getPathAttribute()
     {
-      return asset("api/question/$this->slug");
+        return "/question/$this->slug";
     }
 }
