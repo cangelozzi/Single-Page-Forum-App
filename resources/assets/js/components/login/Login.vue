@@ -17,6 +17,7 @@
 </template>
 
 <script>
+
 export default {
 
   data() {
@@ -29,11 +30,9 @@ export default {
   },
 
   methods: {
+
     login() {
-      //TODO post data to DB with axios
-      axios.post('/api/auth/login', this.form)
-        .then(res => console.log(res.data))
-        .catch(error => console.log(error.response.data))
+      User.login(this.form);
     }
 
   },

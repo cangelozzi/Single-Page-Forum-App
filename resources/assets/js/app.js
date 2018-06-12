@@ -18,6 +18,11 @@ Vue.use(Vuetify)
 //TODO Import and use VUEROUTER
 import router from "./Router/router";
 
+import User from "./Helpers/User";
+window.User = User;
+
+console.log(User.id())
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
