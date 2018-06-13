@@ -10,6 +10,10 @@
 
       <v-btn color="orange" type="submit">Login</v-btn>
 
+      <router-link to="/signup">
+        <v-btn color="blue">Sign Up</v-btn>
+      </router-link>
+
     </v-form>
 
   </v-container>
@@ -17,9 +21,7 @@
 </template>
 
 <script>
-
 export default {
-
   data() {
     return {
       form: {
@@ -29,14 +31,17 @@ export default {
     };
   },
 
-  methods: {
+  created() {
+    if (User.loggedIn()) {
+      this.$router.push({name:'forum'})
+    }
+  },
 
+  methods: {
     login() {
       User.login(this.form);
     }
-
-  },
-
+  }
 };
 </script>
 
