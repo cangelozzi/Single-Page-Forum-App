@@ -34,12 +34,12 @@
             ></v-text-field>
 
             <v-btn
-            color="green"
+            color="orange"
             type="submit"
             >Sign Up</v-btn>
 
             <router-link to="/login">
-                <v-btn color="orange">Login</v-btn>
+                <v-btn color="green">Login</v-btn>
             </router-link>
         </v-form>
     </v-container>
@@ -47,6 +47,7 @@
 
 <script>
 export default {
+
     data(){
         return {
             form :{ 
@@ -58,13 +59,11 @@ export default {
             errors:{}
         }
     },
-
     created(){
         if(User.loggedIn()){
             this.$router.push({name:'forum'})
         }
     },
-    
     methods:{
         signup(){
             axios.post('/api/auth/signup',this.form)
@@ -79,4 +78,5 @@ export default {
 </script>
 
 <style>
+
 </style>

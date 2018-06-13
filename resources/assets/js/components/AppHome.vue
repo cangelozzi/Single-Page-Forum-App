@@ -7,17 +7,12 @@
 </template>
 
 <script>
-import toolbar from "./Toolbar";
-import appFooter from "./AppFooter";
+import toolbar from './Toolbar'
+import AppFooter from './AppFooter'
+import Login from './login/Login'
+
 export default {
-  data(){
-    return {
-
-    }
-  },
-
-  components: {toolbar, appFooter},
-
+  components:{toolbar,AppFooter,Login}
 }
 </script>
 
