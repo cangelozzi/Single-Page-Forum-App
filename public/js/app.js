@@ -37810,7 +37810,7 @@ var User = function () {
     }, {
         key: 'admin',
         value: function admin() {
-            return this.id() == 19;
+            return this.id() == 18;
         }
     }]);
 
