@@ -5,3 +5,5 @@
 ### for testing
 'test@test.com' (admin)
 secret
+
+![image](public/home.png)
